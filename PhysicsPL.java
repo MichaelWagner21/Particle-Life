@@ -1,3 +1,5 @@
+// Force Range: 0-10
+
 public class PhysicsPL {
     int currentX;
     int currentY;
@@ -14,8 +16,8 @@ public class PhysicsPL {
 
     double gravitationalConstant = 50;
 
-    double forceX = 50;
-    double forceY = 0;
+    double forceX = 10;
+    double forceY = 5;
 
     double accelerationX = forceX/mass;
     double accelerationY = forceY/mass;
@@ -23,7 +25,7 @@ public class PhysicsPL {
     double velocityX = accelerationX*(MainPL.time);
     double velocityY = accelerationY*(MainPL.time);
 
-    double terminalVelocity = 100;
+    final double TERMINALVELOCITY = 100;
 
     double displacementX = velocityX*(MainPL.time);
     double displacementY = velocityY*(MainPL.time);
@@ -37,7 +39,7 @@ public class PhysicsPL {
         currentObj = obj;
         currentX = currentObj.tempCurrentX;
         currentY = currentObj.tempCurrentY;
-        this.refresh();
+        //this.refresh();
 
     }
 
@@ -88,13 +90,13 @@ public class PhysicsPL {
         velocityX = accelerationX*MainPL.time;
         velocityY = accelerationY*MainPL.time;
 
-        if (Math.abs(velocityX) >= terminalVelocity){
-            velocityX = (velocityX/Math.abs(velocityX))*(terminalVelocity-1);
+        if (Math.abs(velocityX) >= TERMINALVELOCITY){
+            velocityX = (velocityX/Math.abs(velocityX))*(TERMINALVELOCITY-1);
             forceX = (velocityX*mass)/MainPL.time;
         }
 
-        if (Math.abs(velocityY) >= terminalVelocity){
-            velocityY = (velocityY/Math.abs(velocityY))*(terminalVelocity-1);
+        if (Math.abs(velocityY) >= TERMINALVELOCITY){
+            velocityY = (velocityY/Math.abs(velocityY))*(TERMINALVELOCITY-1);
             forceY = (velocityY*mass)/MainPL.time;
         }
 
@@ -106,17 +108,14 @@ public class PhysicsPL {
 
 
         
-        newX=currentX+(int)displacementX;
-        newY=currentY+(int)displacementY;
+        newX=currentX+(int)Math.round(displacementX);
+        newY=currentY+(int)Math.round(displacementY);
 
         currentObj.setCoords(newX,newY);
         
         currentX = newX;
         currentY = newY;
 
-        System.out.print(forceX);
-        System.out.print(", ");
-        System.out.println(forceY);
         
         MainPL.refresh(MainPL.appFrame);
 

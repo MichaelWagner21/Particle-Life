@@ -10,16 +10,6 @@ public class CirclesPL extends JLabel{
 
     PhysicsPL currentBody;
     
-    public CirclesPL(int x, int y, ImageIcon spriteColor){
-        this.setIcon(spriteColor);
-        this.setBackground(new Color (0,0,0));
-        this.setOpaque(true);
-        this.setCoords(x, y);
-        currentBody = new PhysicsPL(this);
-
-    }
-
-    
     
     public CirclesPL(){
         int x = MainPL.randNum(0,MainPL.xBound());
@@ -28,6 +18,26 @@ public class CirclesPL extends JLabel{
         this.setBackground(new Color (0,0,0));
         this.setOpaque(true);
         this.setCoords(x,y);
+        currentBody = new PhysicsPL(this);
+
+    }
+
+
+    public CirclesPL(int x, int y){
+        this.setIcon(SpritesPL.randomSprite());
+        this.setBackground(new Color (0,0,0));
+        this.setOpaque(true);
+        this.setCoords(x, y);
+        currentBody = new PhysicsPL(this);
+
+    }
+
+
+    public CirclesPL(int x, int y, ImageIcon spriteColor){
+        this.setIcon(spriteColor);
+        this.setBackground(new Color (0,0,0));
+        this.setOpaque(true);
+        this.setCoords(x, y);
         currentBody = new PhysicsPL(this);
 
     }
@@ -41,7 +51,7 @@ public class CirclesPL extends JLabel{
     }
 
     public void setCoords(int x, int y){
-        setBounds(x,750-y,8,8);
+        setBounds(x,750-y,MainPL.DIAMETER,MainPL.DIAMETER);
         tempCurrentX = x;
         tempCurrentY = y;
     }
