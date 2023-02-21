@@ -12,8 +12,8 @@ public class CirclesPL extends JLabel{
     
     
     public CirclesPL(){
-        int x = MainPL.randNum(0,MainPL.xBound());
-        int y = MainPL.randNum(0,MainPL.yBound());
+        int x = MainPL.randNum(0,MainPL.XBOUND);
+        int y = MainPL.randNum(0,MainPL.YBOUND);
         this.setIcon(SpritesPL.randomSprite());
         this.setBackground(new Color (0,0,0));
         this.setOpaque(true);

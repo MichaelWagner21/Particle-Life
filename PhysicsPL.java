@@ -22,13 +22,13 @@ public class PhysicsPL {
     double accelerationX = forceX/mass;
     double accelerationY = forceY/mass;
 
-    double velocityX = accelerationX*(MainPL.time);
-    double velocityY = accelerationY*(MainPL.time);
+    double velocityX = accelerationX*(MainPL.TIME);
+    double velocityY = accelerationY*(MainPL.TIME);
 
     final double TERMINALVELOCITY = 100;
 
-    double displacementX = velocityX*(MainPL.time);
-    double displacementY = velocityY*(MainPL.time);
+    double displacementX = velocityX*(MainPL.TIME);
+    double displacementY = velocityY*(MainPL.TIME);
 
     int newX;
     int newY;
@@ -67,7 +67,7 @@ public class PhysicsPL {
 
  
         //Below If Statements: If outside edge and headed outside of bounds, bounce off edge.
-        if (currentX-MainPL.xBound()>=0 && forceX>=0){
+        if (currentX-MainPL.XBOUND>=0 && forceX>=0){
             forceX = -1*Math.abs(forceX);
         }
 
@@ -75,7 +75,7 @@ public class PhysicsPL {
             forceX = Math.abs(forceX);
         }
 
-        if (currentY-MainPL.yBound()>=-10 && forceY>=0){
+        if (currentY-MainPL.YBOUND>=-10 && forceY>=0){
             forceY = -1*Math.abs(forceY);
         }
 
@@ -87,17 +87,17 @@ public class PhysicsPL {
         accelerationX = forceX/mass;
         accelerationY = forceY/mass;
 
-        velocityX = accelerationX*MainPL.time;
-        velocityY = accelerationY*MainPL.time;
+        velocityX = accelerationX*MainPL.TIME;
+        velocityY = accelerationY*MainPL.TIME;
 
         if (Math.abs(velocityX) >= TERMINALVELOCITY){
             velocityX = (velocityX/Math.abs(velocityX))*(TERMINALVELOCITY-1);
-            forceX = (velocityX*mass)/MainPL.time;
+            forceX = (velocityX*mass)/MainPL.TIME;
         }
 
         if (Math.abs(velocityY) >= TERMINALVELOCITY){
             velocityY = (velocityY/Math.abs(velocityY))*(TERMINALVELOCITY-1);
-            forceY = (velocityY*mass)/MainPL.time;
+            forceY = (velocityY*mass)/MainPL.TIME;
         }
 
 
