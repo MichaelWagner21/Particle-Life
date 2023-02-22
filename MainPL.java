@@ -11,7 +11,7 @@ public class MainPL {
     
     final static double TIME = 10;
     final static int DIAMETER = 8;
-    private final static int CIRCLEAMOUNT = 10;
+    private final static int CIRCLEAMOUNT = 30;
     
     
     

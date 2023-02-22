@@ -1,4 +1,4 @@
-// Force Range: 0-10
+// Force Range: 0-.02
 
 public class PhysicsPL {
     int currentX;
@@ -14,10 +14,10 @@ public class PhysicsPL {
     double sinTheta = 0;
     double cosTheta = 0;
 
-    double gravitationalConstant = 50;
+    double gravitationalConstant = .2;
 
-    double forceX = 10;
-    double forceY = 5;
+    double forceX = .02;
+    double forceY = .02;
 
     double accelerationX = forceX/mass;
     double accelerationY = forceY/mass;
@@ -25,7 +25,7 @@ public class PhysicsPL {
     double velocityX = accelerationX*(MainPL.TIME);
     double velocityY = accelerationY*(MainPL.TIME);
 
-    final double TERMINALVELOCITY = 100;
+    final double TERMINALVELOCITY = 2;
 
     double displacementX = velocityX*(MainPL.TIME);
     double displacementY = velocityY*(MainPL.TIME);
@@ -45,7 +45,6 @@ public class PhysicsPL {
 
     public void refresh(){
 
-       // forceGravity = gravitationalConstant * ((mass*mass)/(Math.pow(twoDimDistance(currentX,currentY,387,375),2)));
         forceGravity = gravitationalConstant * ((mass*mass)/(Math.pow(twoDimDistance(currentX,currentY,387,375),1)));
 
 
@@ -102,9 +101,30 @@ public class PhysicsPL {
 
 
 
-        displacementX = velocityX*0.1;
-        displacementY = velocityY*0.1;
+        displacementX = velocityX*MainPL.TIME;
+        displacementY = velocityY*MainPL.TIME;
 
+
+
+
+        //Below: Collision with other circle
+        if (twoDimDistance(currentX, currentY, 387, 375)<=MainPL.DIAMETER){
+            if (displacementX>0 && oneDimDistance(currentX,387)>0){
+                displacementX = 0;
+            }
+
+            if (displacementY>0 && oneDimDistance(currentY,375)>0){
+                displacementY = 0;
+            }
+
+            if (displacementX<0 && oneDimDistance(currentX,387)<0){
+                displacementX = 0;
+            }
+
+            if (displacementY<0 && oneDimDistance(currentY,375)<0){
+                displacementY = 0;
+            }
+        }
 
 
         
@@ -115,6 +135,8 @@ public class PhysicsPL {
         
         currentX = newX;
         currentY = newY;
+
+        
 
         
         MainPL.refresh(MainPL.appFrame);
@@ -131,6 +153,6 @@ public class PhysicsPL {
     }
 
     public static double oneDimDistance(double x1, double x2){
-        return x2-x1;
+        return (x2-x1);
     }
 }
