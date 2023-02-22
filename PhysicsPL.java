@@ -1,4 +1,4 @@
-// Force Range: 0-.02
+// Force Range: 0-.1
 
 public class PhysicsPL {
     int currentX;
@@ -14,10 +14,10 @@ public class PhysicsPL {
     double sinTheta = 0;
     double cosTheta = 0;
 
-    double gravitationalConstant = .2;
+    double gravitationalConstant = .1;
 
-    double forceX = .02;
-    double forceY = .02;
+    double forceX = MainPL.randNumDouble(0,0.1);
+    double forceY = MainPL.randNumDouble(0,0.1);
 
     double accelerationX = forceX/mass;
     double accelerationY = forceY/mass;
@@ -25,7 +25,7 @@ public class PhysicsPL {
     double velocityX = accelerationX*(MainPL.TIME);
     double velocityY = accelerationY*(MainPL.TIME);
 
-    final double TERMINALVELOCITY = 2;
+    final double TERMINALVELOCITY = 1;
 
     double displacementX = velocityX*(MainPL.TIME);
     double displacementY = velocityY*(MainPL.TIME);
@@ -39,28 +39,52 @@ public class PhysicsPL {
         currentObj = obj;
         currentX = currentObj.tempCurrentX;
         currentY = currentObj.tempCurrentY;
-        //this.refresh();
-
     }
 
     public void refresh(){
 
-        forceGravity = gravitationalConstant * ((mass*mass)/(Math.pow(twoDimDistance(currentX,currentY,387,375),1)));
+        for (int c = 0; c<MainPL.circles.length; c++){
+            if (twoDimDistance(currentX, currentY, MainPL.circles[c].currentBody.currentX, MainPL.circles[c].currentBody.currentY) > MainPL.DIAMETER){
+                forceGravity = gravitationalConstant * ((mass*mass)/(Math.pow(twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY),1)));
 
+                sinTheta = oneDimDistance(currentY, MainPL.circles[c].currentBody.currentY)/twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY);
+                cosTheta = oneDimDistance(currentX, MainPL.circles[c].currentBody.currentX)/twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY);
+                
+                
+                forceGravityX = cosTheta*forceGravity;
+                forceGravityY = sinTheta*forceGravity;
+
+                
+                forceX+=forceGravityX;
+                forceY+=forceGravityY;
+            } 
+        }
 
         
 
 
-        sinTheta = oneDimDistance(currentY, 375)/twoDimDistance(currentX,currentY,387,375);
-        cosTheta = oneDimDistance(currentX, 387)/twoDimDistance(currentX,currentY,387,375);
-       
-       
-        forceGravityX = cosTheta*forceGravity;
-        forceGravityY = sinTheta*forceGravity;
+        //Below: Collision with other circle
+        for (int c = 0; c<MainPL.circles.length; c++){
+            if (twoDimDistance(currentX, currentY, MainPL.circles[c].currentBody.currentX, MainPL.circles[c].currentBody.currentY) != 0){
+                if (twoDimDistance(currentX, currentY, MainPL.circles[c].currentBody.currentX, MainPL.circles[c].currentBody.currentY)<=MainPL.DIAMETER){
+                    if (displacementX>0 && oneDimDistance(currentX,MainPL.circles[c].currentBody.currentX)>0){
+                        forceX = 0;
+                    }
 
-        
-        forceX+=forceGravityX;
-        forceY+=forceGravityY;
+                    if (displacementY>0 && oneDimDistance(currentY,MainPL.circles[c].currentBody.currentY)>0){
+                        forceY = 0;
+                    }
+
+                    if (displacementX<0 && oneDimDistance(currentX,MainPL.circles[c].currentBody.currentX)<0){
+                        forceX = 0;
+                    }
+
+                    if (displacementY<0 && oneDimDistance(currentY,MainPL.circles[c].currentBody.currentY)<0){
+                        forceY = 0;
+                    }
+                }
+            }
+        }
 
         
 
@@ -107,25 +131,7 @@ public class PhysicsPL {
 
 
 
-        //Below: Collision with other circle
-        if (twoDimDistance(currentX, currentY, 387, 375)<=MainPL.DIAMETER){
-            if (displacementX>0 && oneDimDistance(currentX,387)>0){
-                displacementX = 0;
-            }
-
-            if (displacementY>0 && oneDimDistance(currentY,375)>0){
-                displacementY = 0;
-            }
-
-            if (displacementX<0 && oneDimDistance(currentX,387)<0){
-                displacementX = 0;
-            }
-
-            if (displacementY<0 && oneDimDistance(currentY,375)<0){
-                displacementY = 0;
-            }
-        }
-
+        
 
         
         newX=currentX+(int)Math.round(displacementX);
