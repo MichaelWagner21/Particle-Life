@@ -10,20 +10,22 @@ public class PhysicsPL {
 
     double forceGravityX = 0;
     double forceGravityY = 0;
+    double generalForce = 0;
 
     double sinTheta = 0;
     double cosTheta = 0;
 
-    double gravitationalConstant = .1;
+    double gravitationalConstant = 0;
 
-    double forceX = MainPL.randNumDouble(0,0.1);
-    double forceY = MainPL.randNumDouble(0,0.1);
+    double forceX = MainPL.randNumDouble(-0.1,0.1);
+    double forceY = MainPL.randNumDouble(-0.1,0.1);
 
     double accelerationX = forceX/mass;
     double accelerationY = forceY/mass;
 
     double velocityX = accelerationX*(MainPL.TIME);
     double velocityY = accelerationY*(MainPL.TIME);
+    double generalVelocity = 0;
 
     final double TERMINALVELOCITY = 1;
 
@@ -43,12 +45,22 @@ public class PhysicsPL {
 
     public void refresh(){
 
+
+
+        //Below: Calculates force of gravity for all other circles, and finds the sum of forces. 
         for (int c = 0; c<MainPL.circles.length; c++){
             if (twoDimDistance(currentX, currentY, MainPL.circles[c].currentBody.currentX, MainPL.circles[c].currentBody.currentY) > MainPL.DIAMETER){
-                forceGravity = gravitationalConstant * ((mass*mass)/(Math.pow(twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY),1)));
+                gravitationalConstant = ColorsPL.getColorAttraction(currentObj.objColor, MainPL.circles[c].objColor);
+                
+                forceGravity = gravitationalConstant * ((mass*mass)/
+                (Math.pow(twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY),1)));
 
-                sinTheta = oneDimDistance(currentY, MainPL.circles[c].currentBody.currentY)/twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY);
-                cosTheta = oneDimDistance(currentX, MainPL.circles[c].currentBody.currentX)/twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY);
+
+                sinTheta = oneDimDisplacement(currentY, MainPL.circles[c].currentBody.currentY)
+                /twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY);
+
+                cosTheta = oneDimDisplacement(currentX, MainPL.circles[c].currentBody.currentX)
+                /twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY);
                 
                 
                 forceGravityX = cosTheta*forceGravity;
@@ -61,27 +73,27 @@ public class PhysicsPL {
         }
 
         
+        generalForce = Math.sqrt(Math.pow(forceX,2) + Math.pow(forceY,2));
 
-
-        //Below: Collision with other circle
+        //Below: Collision with other circle. 
         for (int c = 0; c<MainPL.circles.length; c++){
+            //Below: if not same circle
             if (twoDimDistance(currentX, currentY, MainPL.circles[c].currentBody.currentX, MainPL.circles[c].currentBody.currentY) != 0){
+                //Below: if too close
                 if (twoDimDistance(currentX, currentY, MainPL.circles[c].currentBody.currentX, MainPL.circles[c].currentBody.currentY)<=MainPL.DIAMETER){
-                    if (displacementX>0 && oneDimDistance(currentX,MainPL.circles[c].currentBody.currentX)>0){
-                        forceX = 0;
-                    }
 
-                    if (displacementY>0 && oneDimDistance(currentY,MainPL.circles[c].currentBody.currentY)>0){
-                        forceY = 0;
-                    }
+                    sinTheta = oneDimDisplacement(currentY, MainPL.circles[c].currentBody.currentY)/
+                    twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY);
 
-                    if (displacementX<0 && oneDimDistance(currentX,MainPL.circles[c].currentBody.currentX)<0){
-                        forceX = 0;
-                    }
+                    cosTheta = oneDimDisplacement(currentX, MainPL.circles[c].currentBody.currentX)/
+                    twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY);
 
-                    if (displacementY<0 && oneDimDistance(currentY,MainPL.circles[c].currentBody.currentY)<0){
-                        forceY = 0;
-                    }
+                    //Below coefficient: Bounce retained/gained. 0 is 0% efficient, -1 is 100%, -2 is 200%, etc.
+                    forceX = -1*cosTheta*generalForce;
+                    forceY = -1*sinTheta*generalForce;
+                    forceX+=MainPL.circles[c].currentBody.forceX;
+                    forceY+=MainPL.circles[c].currentBody.forceY;
+                    
                 }
             }
         }
@@ -112,14 +124,14 @@ public class PhysicsPL {
 
         velocityX = accelerationX*MainPL.TIME;
         velocityY = accelerationY*MainPL.TIME;
+        generalVelocity = Math.sqrt(Math.pow(velocityX,2)+Math.pow(velocityY,2));
 
-        if (Math.abs(velocityX) >= TERMINALVELOCITY){
-            velocityX = (velocityX/Math.abs(velocityX))*(TERMINALVELOCITY-1);
+        //Below: Ensures that object velocity is never above terminal velocity
+
+        if (generalVelocity>TERMINALVELOCITY){
+            velocityX = (TERMINALVELOCITY/generalVelocity)*velocityX;
+            velocityY = (TERMINALVELOCITY/generalVelocity)*velocityY;
             forceX = (velocityX*mass)/MainPL.TIME;
-        }
-
-        if (Math.abs(velocityY) >= TERMINALVELOCITY){
-            velocityY = (velocityY/Math.abs(velocityY))*(TERMINALVELOCITY-1);
             forceY = (velocityY*mass)/MainPL.TIME;
         }
 
@@ -127,23 +139,15 @@ public class PhysicsPL {
 
         displacementX = velocityX*MainPL.TIME;
         displacementY = velocityY*MainPL.TIME;
-
-
-
-
-        
-
         
         newX=currentX+(int)Math.round(displacementX);
         newY=currentY+(int)Math.round(displacementY);
 
         currentObj.setCoords(newX,newY);
         
+        //Below: After obj's coords become newX and newY, they also become the current coords. 
         currentX = newX;
         currentY = newY;
-
-        
-
         
         MainPL.refresh(MainPL.appFrame);
 
@@ -158,7 +162,7 @@ public class PhysicsPL {
         return diagDis;
     }
 
-    public static double oneDimDistance(double x1, double x2){
+    public static double oneDimDisplacement(double x1, double x2){
         return (x2-x1);
     }
 }

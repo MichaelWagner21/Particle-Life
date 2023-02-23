@@ -1,4 +1,5 @@
 import javax.swing.SwingUtilities;
+import java.util.Random;
 
 
 public class MainPL {
@@ -11,7 +12,8 @@ public class MainPL {
     
     final static double TIME = 10;
     final static int DIAMETER = 8;
-    private final static int CIRCLEAMOUNT = 16;
+
+    private final static int CIRCLEAMOUNT = 50;
 
     static CirclesPL[] circles = new CirclesPL[CIRCLEAMOUNT];
     
@@ -19,10 +21,25 @@ public class MainPL {
 
         System.out.print("\033[H\033[2J");
 
-        
+        ColorsPL.setColorAttractors();
 
         for (int c = 0; c<CIRCLEAMOUNT; c++){
-            circles[c] = new CirclesPL();
+            if (c<CIRCLEAMOUNT/5){
+                circles[c] = new CirclesPL("red");
+            }
+            else if (c<2*CIRCLEAMOUNT/5){
+                circles[c] = new CirclesPL("blue");
+            }
+            else if (c<3*CIRCLEAMOUNT/5){
+                circles[c] = new CirclesPL("yellow");
+            }
+            else if (c<4*CIRCLEAMOUNT/5){
+                circles[c] = new CirclesPL("green");
+            }
+            else {
+                circles[c] = new CirclesPL("orange");
+            }
+            
             appFrame.add(circles[c]);
         }
 
@@ -57,7 +74,8 @@ public class MainPL {
     }
 
     public static double randNumDouble(double min, double max){
-        return (Math.random() * (max - min) + min);
+        Random r = new Random();
+        return min + (max - min) * r.nextDouble();
     }
 
     public static void refreshAllObjsIn(CirclesPL[] circlesList){

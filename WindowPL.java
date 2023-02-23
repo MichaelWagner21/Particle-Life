@@ -9,7 +9,7 @@ public class WindowPL extends JFrame{
         this.setTitle("Particle Life");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        this.setSize(800,800);
+        this.setSize(MainPL.XBOUND+25,MainPL.YBOUND+50);
         this.setVisible(true);
         this.setLayout(null);
 

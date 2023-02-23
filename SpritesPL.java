@@ -28,6 +28,7 @@ public class SpritesPL {
     } 
 
     public static ImageIcon randomSprite(){
+        System.out.println("Something Went Wrong, randomSprite is an antiquated method");
         int tempRand = (int)Math.floor(Math.random() *(5 - 1 + 1) + 1);
         
         if (tempRand==1){

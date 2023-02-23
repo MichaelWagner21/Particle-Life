@@ -1,5 +1,4 @@
 import javax.swing.JLabel;
-import javax.swing.ImageIcon;
 import java.awt.Color;
 
 
@@ -9,12 +8,27 @@ public class CirclesPL extends JLabel{
     int tempCurrentY;
 
     PhysicsPL currentBody;
+
+    String objColor;
     
     
     public CirclesPL(){
+        objColor = ColorsPL.randColor();
         int x = MainPL.randNum(0,MainPL.XBOUND);
         int y = MainPL.randNum(0,MainPL.YBOUND);
-        this.setIcon(SpritesPL.randomSprite());
+        this.setIcon(ColorsPL.getSprite(objColor));
+        this.setBackground(new Color (0,0,0));
+        this.setOpaque(true);
+        this.setCoords(x,y);
+        currentBody = new PhysicsPL(this);
+
+    }
+
+    public CirclesPL(String spriteColor){
+        objColor = spriteColor;
+        int x = MainPL.randNum(0,MainPL.XBOUND);
+        int y = MainPL.randNum(0,MainPL.YBOUND);
+        this.setIcon(ColorsPL.getSprite(objColor));
         this.setBackground(new Color (0,0,0));
         this.setOpaque(true);
         this.setCoords(x,y);
@@ -24,7 +38,8 @@ public class CirclesPL extends JLabel{
 
 
     public CirclesPL(int x, int y){
-        this.setIcon(SpritesPL.randomSprite());
+        objColor = ColorsPL.randColor();
+        this.setIcon(ColorsPL.getSprite(objColor));
         this.setBackground(new Color (0,0,0));
         this.setOpaque(true);
         this.setCoords(x, y);
@@ -33,8 +48,9 @@ public class CirclesPL extends JLabel{
     }
 
 
-    public CirclesPL(int x, int y, ImageIcon spriteColor){
-        this.setIcon(spriteColor);
+    public CirclesPL(int x, int y, String spriteColor){
+        objColor = spriteColor;
+        this.setIcon(ColorsPL.getSprite(objColor));
         this.setBackground(new Color (0,0,0));
         this.setOpaque(true);
         this.setCoords(x, y);
@@ -42,13 +58,6 @@ public class CirclesPL extends JLabel{
 
     }
 
-    public CirclesPL(int x, int y, boolean isStationary){
-        this.setIcon(SpritesPL.randomSprite());
-        this.setBackground(new Color (0,0,0));
-        this.setOpaque(true);
-        this.setCoords(x, y);
-
-    }
 
     public void setCoords(int x, int y){
         setBounds(x,750-y,MainPL.DIAMETER,MainPL.DIAMETER);
