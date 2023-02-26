@@ -15,7 +15,7 @@ public class PhysicsPL {
     double sinTheta = 0;
     double cosTheta = 0;
 
-    double gravitationalConstant = 0;
+    double gravitationalModifier = 0;
 
     double forceX = MainPL.randNumDouble(-0.1,0.1);
     double forceY = MainPL.randNumDouble(-0.1,0.1);
@@ -50,9 +50,9 @@ public class PhysicsPL {
         //Below: Calculates force of gravity for all other circles, and finds the sum of forces. 
         for (int c = 0; c<MainPL.circles.length; c++){
             if (twoDimDistance(currentX, currentY, MainPL.circles[c].currentBody.currentX, MainPL.circles[c].currentBody.currentY) > MainPL.DIAMETER){
-                gravitationalConstant = ColorsPL.getColorAttraction(currentObj.objColor, MainPL.circles[c].objColor);
+                gravitationalModifier = ColorsPL.getColorAttraction(currentObj.objColor, MainPL.circles[c].objColor);
                 
-                forceGravity = gravitationalConstant * ((mass*mass)/
+                forceGravity = gravitationalModifier * ((mass*mass)/
                 (Math.pow(twoDimDistance(currentX,currentY,MainPL.circles[c].currentBody.currentX,MainPL.circles[c].currentBody.currentY),1)));
 
 
@@ -72,6 +72,7 @@ public class PhysicsPL {
             } 
         }
 
+        forceY-=.005;
         
         generalForce = Math.sqrt(Math.pow(forceX,2) + Math.pow(forceY,2));
 
